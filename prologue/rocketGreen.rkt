@@ -5,13 +5,16 @@
 (define HEIGHT 100)
 (define WIDTH  100)
 (define CENTER (/ WIDTH  2))
-(define MTSCN  (empty-scene WIDTH HEIGHT "blue"))
-(define ROCK   (rectangle 40 10 "solid" "brown")) ; HOW TO PLACE ROCK??
+(define ROCK-HEIGHT 10)
+(define ROCK   (rectangle 40 ROCK-HEIGHT "solid" "brown"))
 (define ROCKET (overlay (circle 10 "solid" "green")         
                         (rectangle 40 4 "solid" "green")))
+(define MTSCN  (place-image ROCK
+                            50 95
+                            (empty-scene WIDTH HEIGHT "blue")))
 
 (define ROCKET-CENTER-TO-BOTTOM  
-  (- HEIGHT (/ (image-height ROCKET) 2)))
+  (- HEIGHT (+ ROCK-HEIGHT (/ (image-height ROCKET) 2))))
 
 ; functions
   
