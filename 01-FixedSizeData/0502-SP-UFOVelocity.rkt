@@ -29,6 +29,31 @@
 (define u3 (make-ufo p2 v1))
 (define u4 (make-ufo p2 v2))
 
+; functions
+; UFO -> UFO
+; determines where u moves in one clock tick; 
+; leaves the velocity as is 
+(check-expect (ufo-move u1) u3)
+(check-expect (ufo-move u2) (make-ufo (make-posn 17 77) v2)) 
+
+(define (ufo-move u)  
+  (make-ufo    
+   (posn+ (ufo-loc u) 
+          (ufo-vel u))    
+   (ufo-vel u)))
+
+
+; Posn Velocity -> Posn
+; adds v to p
+(check-expect (posn+ p1 v1) p2)
+(check-expect (posn+ p1 v2) (make-posn 17 77))
+
+(define (posn+ p v)  
+  (make-posn (+ (posn-x p) (velocity-dx v))            
+             (+ (posn-y p) (velocity-dy v))))
+
+
+
 
 
 
