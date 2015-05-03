@@ -261,7 +261,7 @@
 -1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 1 0 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 65 105 225 0
-0 0 -1 -1           0 1119 0 4 3 85
+0 0 -1 -1           0 1116 0 4 3 85
 (
  #";; The first three lines of this file were inserted by DrRacket. The"
  #"y record metadata"
@@ -288,8 +288,8 @@
 0 0 17 3 1 #" "
 0 0 17 3 4 #"your"
 0 0 17 3 1 #" "
-0 0 17 3 9 #"structure"
-0 0 17 3 54 #" type definition and data definition from exercise 75 "
+0 0 17 3 63
+#"structure type definition and data definition from exercise 75 "
 0 0 24 29 1 #"\n"
 0 0 17 3 4 #"; to"
 0 0 17 3 1 #" "
@@ -298,8 +298,7 @@
 0 0 17 3 1 #"a"
 0 0 17 3 1 #" "
 0 0 17 3 9 #"direction"
-0 0 17 3 1 #" "
-0 0 17 3 52 #"field. Adjust your happy-cat program so that the cat"
+0 0 17 3 53 #" field. Adjust your happy-cat program so that the cat"
 0 0 24 29 1 #"\n"
 0 0 17 3 7 #"; moves"
 0 0 17 3 1 #" "
@@ -309,8 +308,7 @@
 0 0 17 3 1 #" "
 0 0 17 3 9 #"specified"
 0 0 17 3 1 #" "
-0 0 17 3 10 #"direction."
-0 0 17 3 40 #" The program should move the cat in the "
+0 0 17 3 50 #"direction. The program should move the cat in the "
 0 0 24 29 1 #"\n"
 0 0 17 3 9 #"; current"
 0 0 17 3 1 #" "
@@ -321,8 +319,7 @@
 0 0 17 3 1 #" "
 0 0 17 3 2 #"it"
 0 0 17 3 1 #" "
-0 0 17 3 6 #"should"
-0 0 17 3 44 #" turn the cat around when it reaches either "
+0 0 17 3 50 #"should turn the cat around when it reaches either "
 0 0 24 29 1 #"\n"
 0 0 17 3 19 #"; end of the scene."
 0 0 24 29 1 #"\n"
@@ -367,7 +364,7 @@
 0 0 24 3 1 #" "
 0 0 14 3 4 #"cat1"
 0 0 24 3 1 #" "
-0 2          61 67 1 #"\0"
+0 2          61 4 1 #"\0"
 2 -1.0 -1.0 0.0 0.0 0          25 500
 (
  #"\211PNG\r\n\32\n\0\0\0\rIHDR\0\0\0K\0\0\0u\b"
@@ -1129,7 +1126,7 @@
 0 0 24 3 1 #" "
 0 0 14 3 4 #"cat2"
 0 0 24 3 1 #" "
-0 2          63 67 1 #"\0"
+0 2          63 4 1 #"\0"
 2 -1.0 -1.0 0.0 0.0 0          26 500
 (
  #"\211PNG\r\n\32\n\0\0\0\rIHDR\0\0\0K\0\0\0u\b"
@@ -2899,8 +2896,8 @@
 0 0 24 29 1 #"\n"
 0 0 17 3 14 #"; VCat -> VCat"
 0 0 24 29 1 #"\n"
-0 0 17 3 65
-#"; cat-prog is a Number representing the x-position of a cat image"
+0 0 17 3 11 #"; happy-cat"
+0 0 17 3 55 #" is a Number representing the x-position of a cat image"
 0 0 24 29 1 #"\n"
 0 0 17 3 54 #"; as it moves from left to right across an empty scene"
 0 0 24 29 1 #"\n"
