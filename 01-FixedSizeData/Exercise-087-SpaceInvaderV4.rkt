@@ -1,19 +1,40 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname Exercise-086-SpaceInvaderV3) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")))))
-; Exercise 86. 
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname Exercise-087-SpaceInvaderV4) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")))))
+; Exercise 87. 
 ;
-; Design the function si-game-over? for use as the stop-when handler. 
+; Design the function si-move, which is called for every clock tick. 
+; Accordingly it consumes an element of SIGS and produces another one. 
+; Its purposes is to move all objects according to their velocity.
 ;
-; The game stops if the UFO lands or if the missile hits the UFO. For both 
-; conditions, we recommend that you check for proximity of one object to
-; another.
+; For the random horizontal jumps of the UFO, use the BSL function random.
 ;
-; The stop-when clause allows for an optional second sub-expression, namely 
-; a function that renders the final state of the game. Design si-render-final
-; and use it as the second part for your stop-when clause in the main function 
-; of exercise 88.
+; To test functions that employ random, use the following:
 ;
+;    (define (si-move w)
+;      (si-move-proper w (create-random-number w)))
+;
+; With this definition you separate the creation of a random number from 
+; the act of moving the game objects. While create-random-number produces 
+; possibly different results every time it is called on some fixed state of 
+; the world, si-move-proper is still guaranteed to return the same result 
+; when given the same input. In short, most of the code remains testable with
+; the techniques you already know.
+;
+; For create-random-number, consider using check-random:
+;
+;    SIGS -> Number
+;    create a random number in case a UFO should perform a horizontal jump 
+;     
+;    (check-random (create-random-number a-sigs) (random DELTA-X))
+;     
+;    (define (create-random-number w)
+;      ... (random DELTA-X) ...)
+;
+; This test assumes that the function calls random once for a-sigs, in which 
+; case the expression in check-random’s second sub-expression produces the 
+; same number. 
+
 
 ; Graphic Constants
 (define TREE
@@ -27,6 +48,7 @@
 (define TANK (overlay/align "center" "bottom"
                             (rectangle 10 17 "solid" "DarkKhaki")
                             (rectangle 40 10 "solid" "DarkKhaki")))
+
 (define MISSILE (triangle 5 "solid" "red"))
 
 ; Physical Constants
@@ -38,6 +60,9 @@
 (define UFO-DIA      10)
 (define X-TANK-DISPL (/ (image-width TANK) 2))
 (define Y-UFO-DISPL  (/ (image-height UFO) 2))
+(define DELTA-X      3)
+(define VEL-UFO      3)
+(define VEL-MISSILE  (* 2 VEL-UFO))
 
 (define BACKGROUND
   (place-images (list TREE TREE TREE TREE TREE)
@@ -176,7 +201,8 @@
 (define (si-render-final s)
   (cond
     [(aim? s) (final-screen "You Lose!" "red" (si-render s))]
-    [(ufo-landed? (fired-ufo s)) (final-screen "You Lose!" "red" (si-render s))]
+    [(ufo-landed? (fired-ufo s)) 
+     (final-screen "You Lose!" "red" (si-render s))]
     [else (final-screen "You Win!" "green" (si-render s))])) ; assume a hit
 
 ; String Color Image -> Image
@@ -210,4 +236,58 @@
                 (sqr (- (posn-y m) (posn-y u)))))
        UFO-DIA))
 
+; SIGS -> SIGS
+; move world objects based on current state and velocities
+(define (si-move w)  
+  (si-move-proper w (create-random-number w)))
+
+; SIGS Number -> SIGS
+; move world elements at the given velocity on each clock tick
+; the UFO moves at a constant downward velocity with occasional
+; horizontal jumps
+; the tank moves at a constant speed across the canvas
+; the missile moves at two times the ufo velocity
+(check-expect (si-move-proper (make-aim (make-posn 20 190) (make-tank 30 -3)) 
+                              2)
+              (make-aim (make-posn 22 (+ 190 VEL-UFO))
+                        (make-tank 27 -3)))
+(check-expect (si-move-proper (make-aim (make-posn 10 20) (make-tank 30 -3))
+                              -2)
+              (make-aim (make-posn 8 (+ 20 VEL-UFO))
+                        (make-tank 27 -3)))
+
+(check-expect (si-move-proper (make-fired (make-posn 20 150) 
+                                         (make-tank 30 -3)
+                                         (make-posn 20 155)) 0) 
+              (make-fired (make-posn 20 (+ VEL-UFO 150))
+                          (make-tank 27 -3)
+                          (make-posn (+ 20 VEL-MISSILE) (- 155 VEL-MISSILE))))
+
+(define (si-move-proper w n) 
+  (cond
+    [(aim? w) (make-aim (make-posn (+ (posn-x (aim-ufo w)) n)
+                                   (+ (posn-y (aim-ufo w)) VEL-UFO))
+                        (make-tank (+ (tank-loc (aim-tank w)) 
+                                      (tank-vel (aim-tank w)))                                   
+                                   (tank-vel (aim-tank w))))]
+    [(fired? w) (make-fired (make-posn (+ (posn-x (fired-ufo w)) n)
+                                       (+ (posn-y (fired-ufo w)) VEL-UFO))
+                            (make-tank (+ (tank-loc (fired-tank w)) 
+                                          (tank-vel (fired-tank w)))
+                                        (tank-vel (fired-tank w)))
+                            (make-posn (+ (posn-x (fired-missile w)) 
+                                           VEL-MISSILE)
+                                       (- (posn-y (fired-missile w))
+                                           VEL-MISSILE)))]))                           
+
+; SIGS -> Number
+; create a random number in case a UFO should perform a horizontal jump  
+(check-random (abs( create-random-number (make-aim (make-posn 20 10) 
+                                                   (make-tank 28 -3)))) 
+              (random DELTA-X)) 
+
+(define (create-random-number w)
+  (if (odd? (current-seconds))
+      (* -1 (random DELTA-X))
+      (random DELTA-X)))
 
