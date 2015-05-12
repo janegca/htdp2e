@@ -16,8 +16,9 @@
 
 ; A List-of-Booleans is one of:
 ; - '()
-; - (cons Boolean List-of-Booleans
-; interpretation: a List-of-Booleans represents a true and/or false values
+; - (cons Boolean List-of-Booleans)
+; interpretation: a List-of-Booleans represents a list of true and/or 
+; false values
 
 (check-expect (all-true (cons true (cons true (cons true '())))) true)
 (check-expect (all-true (cons true (cons false (cons true '())))) false)
