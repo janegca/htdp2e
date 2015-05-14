@@ -19,7 +19,7 @@
 
 (define (no-articles fn)
   (write-file (string-append "no-articles-" fn)
-              (collapse (remove-articles-from-lls (read-words/line fn)))))
+              (remove-articles-from-lls (read-words/line fn))))
 
 ; LLS -> LLS
 ; remove the articles "a", "an", "the" from all strings in the given LLS
@@ -33,28 +33,27 @@
 (define los5 (cons "cat" '()))
 
 (check-expect (remove-articles-from-lls lls1)
-              (cons los4 (cons los5 (cons '() '()))))
+              "man in moon \ncat \n\n")
                     
 (define (remove-articles-from-lls lls) 
-  (cond [(empty? lls) '()]
+  (cond [(empty? lls) ""]
         [(cons?  lls)
-         (cond [(cons? (first lls))
-                (cons  (remove-articles-from-los (first lls)) 
-                       (remove-articles-from-lls (rest lls)))]
-               [else (remove-articles-from-los (first lls))])]))
-
+         (string-append (remove-articles-from-los (first lls)) "\n"
+                        (cond [(empty? (rest lls)) ""]
+                              [else (remove-articles-from-lls (rest lls))]))]))
+         
 ; LOS -> LOS
 ; remove the articles "a", "an", "the" from a list of strings
 (check-expect (remove-articles-from-los 
                (cons "a"(cons "bad" (cons "apple" '()))))
-              (cons "bad"(cons "apple" '())))
+              "bad apple ")
 
 (define (remove-articles-from-los los)
-  (cond [(empty? los) '()]
+  (cond [(empty? los) ""]
         [(cons?  los)
          (cond [(is-article? (first los)) 
                 (remove-articles-from-los (rest los))]
-               [else (cons (first los) 
+               [else (string-append (first los) " "
                            (remove-articles-from-los (rest los)))])]))
 
 ; String -> Boolean
@@ -69,33 +68,3 @@
       (string=? "an"  str)
       (string=? "the" str)))
 
-; -- Code from Exercise 157
-;
-; LLS -> String
-; collapse a list of a list of strings into a single string
-(define lls2 (cons (cons "TTT" '())
-      (cons (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place" '())))))
-            (cons (cons "los" (cons "2" '()))
-                  '()))))
-
-(check-expect (collapse '()) "")
-(check-expect (collapse (cons "TTT" '())) "TTT \n")
-(check-expect (collapse 
-               (cons (cons "TTT" '())
-                     (cons (cons "Put" (cons "up" (cons "in" '())))
-                           (cons (cons "los" (cons "2" '()))
-                                 '()))))
-              "TTT \nPut up in \nlos 2 \n")
-
-(define (collapse lls) 
-  (cond [(empty? lls) ""]
-        [(cons?  lls)
-         (cond [(cons? (first lls))
-                (string-append (collapse-line (first lls))
-                               (collapse (rest lls)))]
-               [else (string-append (first lls) " \n")])]))
-
-(define (collapse-line los) 
-  (cond [(empty? los) "\n"]
-        [(cons?   los)
-         (string-append (first los) " " (collapse-line (rest los)))]))
