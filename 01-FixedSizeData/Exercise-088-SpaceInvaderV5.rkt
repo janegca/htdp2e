@@ -248,7 +248,7 @@
     [(aim? w) (make-aim (make-posn (+ (posn-x (aim-ufo w)) n)
                                    (+ (posn-y (aim-ufo w)) VEL-UFO))
                         (make-tank (+ (tank-loc (aim-tank w)) 
-                                      (tank-vel (aim-tank w)))                                   
+                                      (tank-vel (aim-tank w)))   
                                    (tank-vel (aim-tank w))))]
     [(fired? w) (make-fired (make-posn (+ (posn-x (fired-ufo w)) n)
                                        (+ (posn-y (fired-ufo w)) VEL-UFO))
@@ -258,7 +258,7 @@
                             (make-posn (+ (posn-x (fired-missile w)) 
                                            VEL-MISSILE)
                                        (- (posn-y (fired-missile w))
-                                           VEL-MISSILE)))]))                           
+                                           VEL-MISSILE)))])) 
 
 ; SIGS -> Number
 ; create a random number in case a UFO should perform a horizontal jump  

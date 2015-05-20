@@ -1,27 +1,14 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname Exercise-186-FeedingWormsV0) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")))))
-; Exercise 186. 
-; 
-; Design an interactive GUI program that continually moves a one-segment worm
-; and enables a player to control the movement of the worm with the four 
-; cardinal arrow keys. Your program should use a red disk to render the 
-; one-and-only segment of the worm. For each clock tick, the worm should move
-; a diameter.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname Exercise-187-FeedingWormsV1) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")))))
+; Exercise 187.
 ;
-; Hints 
-; (1) Re-read section Designing World Programs to recall how to design world 
-;     programs. When you define the worm-main function, use the rate at which
-;     the clock ticks as its argument. See the documentation for on-tick on 
-;     how to describe the rate. 
-;
-; (2) When you develop a data representation for the worm, contemplate the 
-;     use of two different kinds of representations: a physical representation 
-;     and a logical one. The physical representation keeps track of the actual
-;     physical position of the worm on the screen; the logical one counts how
-;     many (widths of) segments the worm is from the left and the top. For 
-;     which of the two is it easier to change the physical appearances 
-;     (size of worm segment, size of game box) of the “game?” 
+; Modify your program from exercise 186 so that it stops if the worm has run 
+; into the walls of the world. When the program stops because of this 
+; condition, it should render the final scene with the text "worm hit border" 
+; in the lower left of the world scene. Hint You can use the stop-when clause 
+; in big-bang to render the last world in a special way. Challenge: Show the
+; worm in this last scene as if it were on its way out of the box. 
 
 ; -- Physical Constants
 (define RADIUS   10)
@@ -30,8 +17,9 @@
 (define HEIGHT   (* 20 DIAMETER))
 
 ; -- Graphic Constants
-(define MT (empty-scene WIDTH HEIGHT))
+(define MT      (empty-scene WIDTH HEIGHT))
 (define SEGMENT (circle RADIUS "solid" "red"))
+(define MSG     (text "Worm hit border" 16 "black"))
 
 ; -- Data Structures
 (define-struct worm [x y])
@@ -81,13 +69,42 @@
   (make-worm (+ DIAMETER (worm-x w))
              (+ DIAMETER (worm-y w))))
 
+; Worm -> Boolean
+; returns true if the worm has hit any of the four world edges
+(check-expect (game-over? (make-worm 0 20))      true)
+(check-expect (game-over? (make-worm 50 50))     false)
+(check-expect (game-over? (make-worm 50 HEIGHT)) true)
+(check-expect (game-over? (make-worm WIDTH 50))  true)
+(check-expect (game-over? (make-worm 50 0))      true)
+
+(define (game-over? w)
+  (or (<= (worm-x w) 0)
+      (<= (worm-y w) 0)
+      (<= WIDTH  (worm-x w))
+      (<= HEIGHT (worm-y w))))
+
+; Worm -> Image
+; renders the final screen with a message
+(check-expect (render-final (make-worm 0 50))
+               (place-image MSG 
+               (+ 10 (/ (image-width MSG) 2))
+               (- HEIGHT (image-height MSG))
+               (render (make-worm 0 50))))
+
+(define (render-final w)
+    (place-image MSG 
+               (+ 10 (/ (image-width MSG) 2))
+               (- HEIGHT (image-height MSG))
+               (render w)))
+  
 ; Worm -> Worm
 ; start the worm feeding
 (define (worm-main rate)
-  (big-bang (make-worm 10 10)
-            [to-draw render ]
-            [on-key  control]
-            [on-tick tock rate]))
+  (big-bang (make-worm DIAMETER DIAMETER)
+            [to-draw   render ]
+            [on-key    control]
+            [on-tick   tock rate]
+            [stop-when game-over? render-final]))
 
 ; -- usage example
 (worm-main 1)
