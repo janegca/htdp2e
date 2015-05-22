@@ -78,7 +78,7 @@
         [else w]))
 
 ; Worm -> Worm
-; with each clock-tick the worm moves the worm one diameter
+; with each clock-tick the worm moves one diameter
 ; in the current direction
 (check-expect (tock (make-worm "N" (list (make-posn 20 50))))
               (make-worm "N" (list (make-posn 20 (- 50 DIAMETER)))))
@@ -94,13 +94,14 @@
                                    (make-posn 50 50))))
 
 (define (tock w)
-  (cond [(string=? "N" (worm-dir w))
+  (cond [(string=? "N"  (worm-dir w))
          (make-worm "N" (move-vert -1 (worm-body w)))]
-        [(string=? "S" (worm-dir w))
+        [(string=? "S"  (worm-dir w))
          (make-worm "S" (move-vert 1 (worm-body w)))]
-        [(string=? "E" (worm-dir w))
+        [(string=? "E"  (worm-dir w))
          (make-worm "E" (move-horiz -1 (worm-body w)))]
-        [else (make-worm "W" (move-horiz 1 (worm-body w)))]))
+        [else 
+         (make-worm "W" (move-horiz 1 (worm-body w)))]))
   
 ; Number List-of-Posns -> List-of-Posns
 ; moves the worm vertically (up if the multiplier is negative, right if
