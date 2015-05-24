@@ -326,8 +326,10 @@
 (check-satisfied (food-create (make-posn 1 1)) not-equal-1-1?)
  
 (define (food-create p)
-  ; [NOTE: modified originally provied code to create grid-like placements
-  ;         of food; ensuring worm segments will fully overlap food pieces]
+  ; [NOTE: modified originally provided code to create grid-like placements
+  ;        of food; ensuring worm segments will fully overlap food pieces.
+  ;        If location vs physical coords were used then the adjustment
+  ;        would have been needed in the rendering functions.]
   (food-check-create p (make-posn (- (* DIAMETER (random MAX)) RADIUS)
                                   (- (* DIAMETER (random MAX)) RADIUS))))
 
@@ -352,7 +354,7 @@
   (not (and (= (posn-x p) 1) (= (posn-y p) 1))))
 
 ; -- Main Function
-; Worm -> Worm
+; Worm Number -> Worm
 ; start the worm feeding
 (define (worm-main rate)
   (big-bang (make-worm "S" 
