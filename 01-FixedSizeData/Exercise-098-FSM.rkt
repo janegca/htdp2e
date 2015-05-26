@@ -104,10 +104,10 @@
 
 ; FSM -> Boolean
 ; if the state is DD or ER, we are done
-(check-expect (done (make-fsm AA BG)) false)
-(check-expect (done (make-fsm DD RED)) true)
+(check-expect (done (make-fsm AA BG))     false)
+(check-expect (done (make-fsm DD RED))    true)
 (check-expect (done (make-fsm BC YELLOW)) false)
-(check-expect (done (make-fsm ER RED)) true)
+(check-expect (done (make-fsm ER RED))    true)
 
 (define (done fsm)
   (if (or (string=? DD (fsm-state fsm)) (string=? ER (fsm-state fsm)))
