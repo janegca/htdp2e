@@ -62,7 +62,10 @@
                              (append-space (rest lst)))]))
 
 
-; or, using text example
+; or, using text example 
+; - HIGHER ORDER FUNCTIONS MEAN YOU DON'T NEED TO WRITE AS
+;   MANY 'EXTRA' FUNCTIONS
+; 
 ; [List-of Addr] -> String 
 ; creates a string of first names, sorted in alphabetical order,
 ; separated and surrounded by blank spaces
@@ -75,6 +78,11 @@
          (sort (map address-first-name l) ; REMEMBER - address-first-name
                string<?)))                ;   is a 'getter' function created
                                           ;   when the structure is declared
+                                          ; MAP is a higher order function
+                                          ; that applies address-first-name
+                                          ; to every item in a list
+                                          ; SORT is another higher order function
+                                          ; as is FOLDR
 
 ; String String -> String 
 ; concatenates two strings and prefixes with space 
