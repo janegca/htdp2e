@@ -1,32 +1,26 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname Exercise-196-FireFightV3) (read-case-sensitive #t) (teachpacks ((lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "image.rkt" "teachpack" "2htdp")))))
-; Exercise 196. (version 3)
-; 
-; Design a fire-fighting game.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname Exercise-240-RevisitingFireFight) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp")))))
+; Exercise 240
 ;
-; The game is set in the western states where fires rage through vast forests.
-; It simulates an airborne fire-fighting effort. Specifically, the player acts 
-; as the pilot of an airplane that drops loads of water on fires on the ground.
-; The player controls the plane’s horizontal movements and the release of water
-; loads.
+; NOTE: original exercise is to apply abrstractinons to Full Space Wars
+;       (Exercise 195), here, it is being applied to Fire Fighting
+;       (Exercise 196).
 ;
-; Your game software starts fires randomly anywhere on the ground. You may
-; wish to limit the number of fires that may burn at any point in time, making 
-; them a function of how many fires are currently burning. The purpose of the
-; game is to extinguish all fires with a limited number of water drops.
+; Inspect the code of your project for places where it can benefit from 
+; existing abstraction, e.g., processing lists of shots or charges.
 ;
-; Use an iterative design approach as illustrated in this chapter to create
-; this game.
+; Once you have simplified the code with the use of existing abstractions 
+; look for opportunities to create abstractions. Consider moving lists of 
+; objects as one example where abstraction may pay off. 
 
-; In this version:
-;
-;   7. Add a limit for the number of water bombs and modify render
-;      function to display a bomb count
-;   8. Add a game-over? function (game ends when max water bombs have
-;      been dropped)
-;   9. Add a render-final function to display a game over message
-;    
+; -- First round of modifications -----------
+;  render-water     altered to use a local fn and foldr
+;  render-fire      altered to use a local fn and foldr
+;  douse-fires      altered to use a local fn and filter
+;  is-hit?          altered to use a local fn and ormap
+;  move-water-bombs altered to use a local fn and map
+
 ; -- Physical Constants
 (define WIDTH  200)
 (define HEIGHT WIDTH)
@@ -149,21 +143,17 @@
             
 ; Water Image -> Image
 ; draw the water bombs
-(define (render-water low img)
-  (cond [(empty? low) img]
-        [else (place-image WATER 
-                           (posn-x (first low))
-                           (posn-y (first low))
-                           (render-water (rest low) img))]))
+(define (render-water low bg)
+  (local ((define (bld-img p1 p2)
+            (place-image WATER (posn-x p1) (posn-y p1) p2)))
+    (foldr bld-img bg low)))
                            
 ; Fire Image -> Image
 ; draw the fires
 (define (render-fire lof img)
-  (cond [(empty? lof) img]
-        [else (place-image FIRE
-                           (posn-x (first lof))
-                           (posn-y (first lof))
-                           (render-fire (rest lof) img))]))
+  (local ( (define (bld-img p1 p2)
+           (place-image FIRE (posn-x p1) (posn-y p1) p2)))
+    (foldr bld-img img lof)))
 
 ; FFW KeyEvent -> FFW
 ; responds to user key presses, moving the plane across the scene
@@ -259,11 +249,10 @@
               (list (make-posn 50 175)))
 
 (define (douse-fires low lof)
-  (cond [(empty? lof) '()]
-        [(is-hit? (first lof) low) (douse-fires low (rest lof))]
-        [else (cons (first lof)
-                    (douse-fires low (rest lof)))]))
-
+  (local ((define (not-a-hit f)
+            (not (is-hit? f low))))
+    (filter not-a-hit lof)))
+          
 ; Posn Water -> Boolean
 ; returns true if a dropped water bomb corresponds to the
 ; given fire's position 
@@ -276,10 +265,10 @@
                              (make-posn 80 170))) true)
 
 (define (is-hit? f low)
-  (cond [(empty? low)  false]
-        [(in-range?    f (first low)) true]
-        [else (is-hit? f (rest low))]))
-
+  (local ( (define (close? w)
+             (in-range? f w)))
+    (ormap close? low)))
+  
 ; Posn Posn -> Boolean
 ; returns true if the two positions are within range of each other
 (define (in-range? m n)
@@ -297,11 +286,9 @@
                     (make-posn 95 (+ 75 DELTA))))
 
 (define (move-water-bombs low)
-  (cond [(empty? low) '()] 
-        [else 
-         (cons (make-posn (posn-x (first low))
-                               (+ DELTA (posn-y (first low))))
-               (move-water-bombs (rest low)))]))
+  (local ((define (change-posn w)
+            (make-posn (posn-x w) (+ DELTA (posn-y w)))))
+    (map change-posn low)))
 
 ; FFW -> FFW
 ; add a new fire to the scene
@@ -336,4 +323,4 @@
             [stop-when game-over? render-final]))
 
 ; -- example usage
-(ffw-main 0.2)
+;(ffw-main 0.2)

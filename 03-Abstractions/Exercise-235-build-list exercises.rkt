@@ -49,36 +49,35 @@
 (check-expect (reciprocals-of-powers-of-ten 4) (list 1 1/10 1/100 1/1000))
 
 (define (reciprocals-of-powers-of-ten num)
-  (local (; Number -> [List-of Number]
-          ; return a list from 10 to 10^n
-          (define (get-recip-list n)
-            (build-list n as-recip))
-          
-          ; Number -> Number
-          ; returns the reciprocal of nth power of 10
+  (local (; Number -> Number
+          ; returns the reciprocal of the nth power of 10
           (define (as-recip n)
             (/ 1 (expt 10 n))))
     
-    (get-recip-list num)))
+    (build-list num as-recip)))
 
 ; Number -> [List-of Number]
 ; return the first n even numbers
-(check-expect (even-nums 4) (list 2 4))
+(check-expect (even-nums 4) (list 0 2 4 6))
 
 (define (even-nums n)
-  (filter even? (build-list n add1)))
+  (local ( (define (even i) (* 2 i)))
+    (build-list n even)))
 
 ; Number -> [List-of [List-of Number]]
 ; creates a list of lists of 0 and 1 a diagonal arrangement
+;
+(check-expect (diagonal 3)
+              (list (list 1 0 0) (list 0 1 0) (list 0 0 1)))
 
 (define (diagonal n)
-  (local (; 
-          (define indices (cons 0 (build-list (- n 1) add1)))
+  (local (; column and row indices
+          (define indices (whole-nums (- n 1)))
           
-          (define (build-table m)
+          (define (build-diagonal m)
             (cond [(= m n) '()]
                   [else (cons (build-row m indices)
-                              (build-table (+ m 1)))]))
+                              (build-diagonal (+ m 1)))]))
           
           (define (build-row i cols)
             (cond [(empty? cols) '()]
@@ -86,8 +85,33 @@
                    (cons 1 (build-row i (rest cols)))]
                   [else (cons 0 (build-row i (rest cols)))])))
     
-    (build-table 0)))
+    (build-diagonal 0)))
 
+; Solution from 1st Edition Exercise 21.1.3
+; http://www.htdp.org/2003-09-26/Solutions/build-list1.html
 
+(check-expect (diagonal.v2 3)
+              (list (list 1 0 0) (list 0 1 0) (list 0 0 1)))
 
+(define (diagonal.v2 n)
+  (local ((define (rows i)
+            ; Note: nested local definitions allowed
+            (local ((define (element j) 
+                      (cond [(= i j) 1] 
+                                              [else 0])))
+              (build-list n element))))
+    (build-list n rows)))
+
+; Number [Number Number -> Number] -> [List-of Number]
+(check-expect (tabulate 2 sqr) (list 4 1 0))
+(check-within (tabulate 2 tan)
+              (list (tan 2) (tan 1) (tan 0))
+              0.1)
+(check-within (tabulate 1 sin)
+              (list (sin 1) (sin 0)) 0.1)
+(check-within (tabulate 4 cos)
+              (list (cos 4) (cos 3) (cos 2) (cos 1) (cos 0)) 0.1)
+
+(define (tabulate n f)
+  (reverse (build-list (+ n 1) f)))
 
