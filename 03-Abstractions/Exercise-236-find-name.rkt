@@ -28,18 +28,15 @@
 ; 1String [List-of String] -> Boolean
 ; returns true if all names in the list of strings begin with
 ; the given 1String
-(check-expect (all-begin-with? "a" '()) false)
+(check-expect (all-begin-with? "a" '()) true)
 (check-expect (all-begin-with? "" (list "hello")) false)
 (check-expect (all-begin-with? "a" (list "and" "after" "am")) true)
 
 (define (all-begin-with? c los)
   (local (; String -> Boolean
           (define (begins-with? s)
-            (string=? c (string-ith s 0))))
-    (if (or (empty? los) 
-            (string=? "" c))
-        false        
-        (andmap begins-with? los))))
+            (string=? c (string-ith s 0))))       
+        (andmap begins-with? los)))
 
 ; Number [List-of String] -> Boolean
 ; returns true if any string exceeds the given width (w)

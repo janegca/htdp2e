@@ -47,8 +47,6 @@
               (not (string-contains? ty (ir-name str))))
             loir))
 
-; -- TODO -- Need to re-write this whole function
-
 ; [List-of String] [List-of String] -> [List-of String]
 ; returns a list of names from the second list of strings which also
 ; appear in the first list of strings
@@ -59,14 +57,5 @@
               (list "Paul" "Ringo"))
 
 (define (selection los1 los2)
-  (cond [(or (empty? los1) 
-             (empty? los2)) '()]
-        [else 
-           (local (; String -> Boolean
-                   (define (is-member? name)
-                     (member? name los1))
-             (define get-first (first los2))
-             (define get-rest  (selection los1 (rest los2))))
-         (if (is-member? get-first) 
-                  (cons get-first get-rest)
-                  get-rest))]))
+    (filter (lambda (str) (member? str los2))
+            los1))

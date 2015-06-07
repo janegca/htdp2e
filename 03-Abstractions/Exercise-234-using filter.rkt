@@ -70,14 +70,6 @@
               (list "Paul" "Ringo"))
 
 (define (selection los1 los2)
-  (cond [(or (empty? los1) 
-             (empty? los2)) '()]
-        [else 
-           (local (; String -> Boolean
-                   (define (is-member? name)
-                     (member? name los1))
-             (define get-first (first los2))
-             (define get-rest  (selection los1 (rest los2))))
-         (if (is-member? get-first) 
-                  (cons get-first get-rest)
-                  get-rest))]))
+  (local ((define (is-member? str)
+            (member? str los2)))
+    (filter is-member? los1)))
