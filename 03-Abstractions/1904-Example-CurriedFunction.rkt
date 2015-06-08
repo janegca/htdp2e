@@ -9,6 +9,9 @@
 ;       although not comletely; still having trouble with the check using
 ;       'sorted-variant-of'
 ;
+;       2015-06-08 the next release of DrRacket should fix the problem
+;                  with check-satisfied
+;
 ;
 ; sort-cmp routine from Figure 59
 ; [List-of Number] [Number Number -> Boolean] -> [List-of Number]
@@ -104,14 +107,13 @@
          (contains? k l0))))
 
 ; [Listof X] [Listof X] -> Boolean 
-; are all items in list l members of list k
-
-(check-expect (contains? '(1 2 3)   '(2 1 4 3)) #true) 
-(check-expect (contains? '(1 2 3 4) '(2 1 3))   #false)
-
-; Note: original code has (contain? k l) but tests fail
+; are all items in list k members of list l
+ 
+(check-expect (contains? '(1 2 3) '(2 1 4 3)) #false)
+(check-expect (contains? '(1 2 3 4) '(2 1 3)) #true)
+ 
 (define (contains? l k)
-  (andmap (lambda (item-in-l) (member? item-in-l k)) l))
+  (andmap (lambda (item-in-k) (member? item-in-k l)) k))
 
 ; -- this first version of 'sorted-variant-of' will pass tests
 ;    that are essentially incorrect
