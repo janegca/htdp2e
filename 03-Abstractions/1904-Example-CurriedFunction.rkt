@@ -106,9 +106,10 @@
 ; [Listof X] [Listof X] -> Boolean 
 ; are all items in list l members of list k
 
-(check-expect (contains? '(1 2 3)   '(2 1 4 3)) #true)
+(check-expect (contains? '(1 2 3)   '(2 1 4 3)) #true) 
 (check-expect (contains? '(1 2 3 4) '(2 1 3))   #false)
 
+; Note: original code has (contain? k l) but tests fail
 (define (contains? l k)
   (andmap (lambda (item-in-l) (member? item-in-l k)) l))
 
