@@ -8,6 +8,7 @@
 
 (require htdp/dir)
 
+; Dir -> [List-of LOD]
 (check-expect (ls (make-dir 'Test empty empty)) '(Test))
 (check-expect (ls (make-dir 'T
                             empty

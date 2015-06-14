@@ -8,7 +8,7 @@
 
 (require htdp/dir)
 
-; Dir Symbol -> Boolean
+; Dir File -> Boolean
 ; true if the file is found in the directory structure
 (check-expect (find? (make-dir 'Test empty empty) '|King Lear.pdf|) #false)
 (check-expect (find? (make-dir 'Test
@@ -38,15 +38,12 @@
                      '|King Lear.pdf|) #true)
                  
 (define (find? root file)
-  (local ((define (srch-dir d*)
-            (cond [(empty? d*) #false]
-                  [(srch-files (dir-files (first d*))) #true]
-                  [else (srch-dir (rest d*))]))
-          
-          (define (srch-files f*)
+  (local (; LOF -> Boolean
+          ; true if file is found in the list of files
+          (define (found-file? f*)
             (ormap (lambda (f) (eq? file (file-name f))) f*)))
-            
-  (cond [(empty? (dir-dirs root))
-         (srch-files    (dir-files root))]
-        [else (srch-dir (dir-dirs root))])))
-
+    
+    (or (found-file? (dir-files root))
+        ; check all sub-directories
+        (ormap (lambda (d) (found-file? (dir-files d))) (dir-dirs root)))))
+    

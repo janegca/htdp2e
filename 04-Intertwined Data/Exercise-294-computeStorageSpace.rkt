@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-293-computeStorageSpace) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-294-computeStorageSpace) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ; Exercise 294. 
 ; 
 ; Design du, a function that consumes a Dir and computes the total size of
@@ -35,14 +35,8 @@
      43)
                                             
 (define (du root)
-  (local (; LOF -> Number
-          ; total of the file sizes in the given list
-          (define (file-storage f*)
-            (foldr + 0 (map file-size f*))))
-  (+ 1 
-     (cond [(empty? (dir-dirs root)) 
-            (file-storage (dir-files root))]
+  (+ 1  ; count root directory
+     (foldr + 0 (map file-size (dir-files root)))
+     (cond [(empty? (dir-dirs root)) 0]
            [else 
-            (+ (file-storage (dir-files root))
-               (foldr + 0 (map (lambda (d) (du d)) (dir-dirs root))))]))))
-
+            (foldr + 0 (map (lambda (d) (du d)) (dir-dirs root)))])))
