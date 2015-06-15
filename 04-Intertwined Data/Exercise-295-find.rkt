@@ -17,6 +17,10 @@
 ;            What should find-all produce when (find? f d) is #false? Is this
 ;            part of the problem really a challenge compared to the basic 
 ;            problem?
+;
+; NOTES:  find-all is not quite right; includes name of all directories
+;         having sub-directories (see tests for 'part1 and non-existant
+;         file). Problem is with the design of 'srch-dir' and 'srch-sub-dirs'
 
 (require htdp/dir)
 
@@ -59,24 +63,74 @@
                               empty)
                     'read!)
               (list 'T 'T1 'read!))
+(check-expect (find f73 'read!) (list 'TS 'read!))
+(check-expect (find f73 'draw)  (list 'TS 'Libs 'Code 'draw))
+(check-expect (find f73 'part1) (list 'TS 'Text 'part1))
 
 (define (find root file)
-  (local (          
+  (local (; Dir -> Boolean
           (define (find-in-this-dir d)
             (ormap (lambda (f) (eq? file (file-name f))) (dir-files d)))
           
+          ; [List of Dir] -> Path
           (define (find-in-subdirs d*)
             (cond [(empty? d*) '()]
-                  [(find-in-this-dir (first d*))
-                   (append (list (dir-name (first d*)) file)
-                           (find-in-subdirs (rest d*)))]
-                  [else (append (list (dir-name (first d*)))
-                                (find-in-subdirs (rest d*)))])))
+                  [else (append (find (first d*) file)
+                                (if (find-in-this-dir (first d*))
+                                    '()
+                                    (find-in-subdirs (rest d*))))])))
     
-    (append (if (find-in-this-dir root)
-                (list (dir-name root) file)
-                '())
-            (find-in-subdirs (dir-dirs root)))))
+    (cond [(find-in-this-dir root)
+           (list (dir-name root) file)]
+          [(empty? (dir-dirs root)) '()]
+          [else (append (list (dir-name root))
+                        (find-in-subdirs (dir-dirs root)))])))
 
-; NOT RIGHT YET
+; Dir File -> [List-of Path]
+; list all paths to the found file
+(check-expect (find-all f73 'read!) 
+              (list (list 'TS 'read!)
+                    (list 'TS 'Libs 'Docs 'read!)))
+(check-expect (find-all f73 'hang)  
+              (list (list 'TS 'Libs 'Code 'hang)))
+(check-expect (find-all f73 'part1) 
+              (list (list 'TS 'Text 'part1)))
+(check-expect (find-all f73 'test) (list '()))
+
+(define (find-all root file)
+  (local (; LOP LOD -> LOP
+          ; searches a list of directories for file
+          (define (srch-sub-dirs p* d*)
+            (cond [(empty? d*) '()]
+                  [(found-in-files? (first d*)) 
+                     ; append path and continue search
+                     (append p* (find (first d*) file))]
+                  [else 
+                   ; check current node's subdirectories and remaining dirs
+                   (append 
+                    (srch-sub-dirs 
+                     (append p* (list (dir-name (first d*))))
+                     (dir-dirs (first d*)))
+                    (srch-sub-dirs p* (rest d*)))]))
+            
+          ; Dir -> LOP
+          ; the file path as a list element, if the file is found
+          ; otherwise, an empty path
+          (define (file-path d)
+            (cond [(empty? (dir-files d)) '()]
+                  [(found-in-files? d)
+                   (list (list (dir-name d) file))]
+                  [else '()]))
+                    
+          ; Dir -> Boolean
+          ; returns true if file is found in the directory's list
+          ; of files
+          (define (found-in-files? d)
+            (ormap (lambda (f) (eq? file (file-name f))) (dir-files d))))
+    ; -- IN --
+    (append (file-path root)
+            (if (list? (dir-dirs root)) ; has sub-dirs?
+                (list (srch-sub-dirs (list (dir-name root)) ; parent dirs
+                                     (dir-dirs root)))
+                '()))))
 
