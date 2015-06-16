@@ -17,10 +17,6 @@
 ;            What should find-all produce when (find? f d) is #false? Is this
 ;            part of the problem really a challenge compared to the basic 
 ;            problem?
-;
-; NOTES:  find-all is not quite right; includes name of all directories
-;         having sub-directories (see tests for 'part1 and non-existant
-;         file). Problem is with the design of 'srch-dir' and 'srch-sub-dirs'
 
 (require htdp/dir)
 
