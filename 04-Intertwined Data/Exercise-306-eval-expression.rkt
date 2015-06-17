@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-300-eval-expression) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-306-eval-expression) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ; Exercise 306. 
 ; 
 ; Design eval-expression. The function consumes a representation of a BSL 
@@ -28,6 +28,7 @@
 (check-expect (eval-expr (make-add 1 1)) 2)
 (check-expect (eval-expr (make-mul 3 10)) 30)
 (check-expect (eval-expr (make-add (make-mul 1 1) 10)) 11)
+(check-error  (eval-expr 'x))
 
 (define (eval-expr bexpr)
   (cond [(number? bexpr) bexpr]
