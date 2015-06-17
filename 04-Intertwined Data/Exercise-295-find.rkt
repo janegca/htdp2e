@@ -44,7 +44,7 @@
 ; Path = [List-of Symbol]
 ; interpretation directions on how to find a file in a directory tree
 
-; Dir File -> Path
+; Dir Symbol -> Path
 ; returns the path of the file, if found in the directory structure
 (check-expect (find (make-dir 'T empty empty) 'read!) '())
 (check-expect (find (make-dir 'T 
@@ -82,7 +82,7 @@
           [else (append (list (dir-name root))
                         (find-in-subdirs (dir-dirs root)))])))
 
-; Dir File -> [List-of Path]
+; Dir Symbol -> [List-of Path]
 ; list all paths to the found file
 (check-expect (find-all f73 'read!) 
               (list (list 'TS 'read!)
