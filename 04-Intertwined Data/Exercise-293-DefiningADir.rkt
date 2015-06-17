@@ -1,7 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-287-DefiningADir) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 287. 
+; Exercise 293. 
 ; 
 ; Show how to equip a directory with two more attributes: size and readability.
 ; The former measures how much space the directory itself (as opposed to its

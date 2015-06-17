@@ -1,11 +1,11 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-286-Model2-how-many) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 286. 
+; Exercise 292. 
 ; 
 ; Design the function how-many, which determines how many files a given Dir.v2 
-; contains. Exercise 285 provides you with data examples. Compare your result
-; with that of exercise 284.
+; contains. Exercise 291 provides you with data examples. Compare your result
+; with that of exercise 290.
 
 ; -- Data Definitions
 ; A Dir.v2 is a structure: 

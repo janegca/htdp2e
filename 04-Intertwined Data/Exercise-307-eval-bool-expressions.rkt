@@ -1,7 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |Exercise-301-boolean expressions|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 301. 
+; Exercise 307. 
 ;
 ; Develop a data representation for boolean BSL expressions constructed 
 ; from #true, #false, and, or, and not. Then design eval-bool-expression.

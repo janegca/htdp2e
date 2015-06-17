@@ -1,7 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-295-find) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 295. 
+; Exercise 301. 
 ; 
 ; Design find. The function consumes a directory d and a file name f. If 
 ; (find? d f) is true, find produces a path to a file with name f; otherwise 

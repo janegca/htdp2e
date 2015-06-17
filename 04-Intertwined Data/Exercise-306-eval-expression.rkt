@@ -1,10 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-300-eval-expression) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 300. 
+; Exercise 306. 
 ; 
 ; Design eval-expression. The function consumes a representation of a BSL 
-; expression (according to exercise 298) and computes its value.
+; expression (according to exercise 304) and computes its value.
 
 ; A BSL-expr is one of:
 ; - Number

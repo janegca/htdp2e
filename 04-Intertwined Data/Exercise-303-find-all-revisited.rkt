@@ -1,11 +1,14 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-296-ls-R) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 296. 
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-297-find-all-revisited) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+; Exercise 303. 
+; 
+; Re-design find-all from exercise 301 using ls from exercise 302. This is
+; design by composition, and if you solved the challenge part of exercise 
+; 302 your new function can find directories, too.
 ;
-; Design the function ls-R, which lists the paths to all files in a given Dir. 
-; Challenge: Modify ls-R so that its result includes all paths to directories,
-;            too.
+; NOTE: if searching for a directory, paths to all the found directory's
+;       contents are returned
 
 (require htdp/dir)
 
@@ -33,41 +36,10 @@
 ; Path = [List-of Symbol]
 ; interpretation directions on how to find a file in a directory tree
 
+; -- ls-R from Exercise 296
+
 ; Dir -> LLOP
 ; a list of all file paths in the directory structure
-(check-expect (ls-R (make-dir 'TS empty empty)) (list (list 'TS)))
-(check-expect (ls-R (make-dir 'TS 
-                              '() 
-                              (list (make-file 'read! 10 ""))))
-              (list (list 'TS) (list 'TS 'read!)))
-(check-expect (ls-R (make-dir 'TS 
-                              (list (make-dir 'Text 
-                                              '()
-                                              (list (make-file 'part1 99 "")
-                                                    (make-file 'part2 52 "")
-                                                    (make-file 'part3 17 ""))))
-                              '()))
-              (list (list 'TS)
-                    (list 'TS 'Text)
-                    (list 'TS 'Text 'part1)
-                    (list 'TS 'Text 'part2)
-                    (list 'TS 'Text 'part3)))
-
-(check-expect (ls-R f73)
-              (list
-               (list 'TS)
-               (list 'TS 'read!)
-               (list 'TS 'Text)
-               (list 'TS 'Text 'part1)
-               (list 'TS 'Text 'part2)
-               (list 'TS 'Text 'part3)
-               (list 'TS 'Libs)
-               (list 'TS 'Libs 'Code)
-               (list 'TS 'Libs 'Code 'hang)
-               (list 'TS 'Libs 'Code 'draw)
-               (list 'TS 'Libs 'Docs)
-               (list 'TS 'Libs 'Docs 'read!)))
-
 (define (ls-R root)
   (local (; Dir LLOP -> LLOP
           ; a list of filepaths for all directories and files
@@ -99,3 +71,28 @@
                            files)))))
     ;-- IN --
     (process-dir '() root)))
+
+; Dir Symbol -> LLOP
+; the paths to file in the directory structure
+(check-expect (find-all 'read! f73)
+              (list (list 'TS 'read!)
+                    (list 'TS 'Libs 'Docs 'read!)))
+(check-expect (find-all 'Code f73)
+              (list (list 'TS 'Libs 'Code)
+                    (list 'TS 'Libs 'Code 'hang)
+                    (list 'TS 'Libs 'Code 'draw)))
+              
+(define (find-all sym root)
+  (local ((define paths (ls-R root))
+          (define (srch-paths p*)
+            (cond [(empty? p*) '()]
+                  [(member? sym (first p*))
+                   (append (list (first p*))
+                           (srch-paths (rest p*)))]
+                  [else (srch-paths (rest p*))])))
+    ; -- IN --
+    (srch-paths paths)))
+
+    
+          
+    

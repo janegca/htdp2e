@@ -1,27 +1,34 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-280-Simplifying-Model3-how-many) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 290. 
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-289-Model3-how-many) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+; Exercise 295. 
+; 
+; Design the function how-many, which determines how many files a given Dir.v3 
+; contains. Exercise 294 provides you with data examples. Compare your result
+; with that of exercise 292.
 ;
-; Use List-of to simplify the data definition Dir.v3. Then use ISL+’s list
-; processing functions from figure 56 to simplify the function definition(s) 
-; for the solution of exercise 289.
+; Given the complexity of the data definition, contemplate how anyone can
+; design correct functions. Why are you confident that how-many produces
+; correct results? 
 
 (define-struct file [name size content])
-; A File is a structure: 
+; A File.v3 is a structure: 
 ;   (make-file Symbol N String)
 
 (define-struct dir.v3  [name dirs files])
 ; A Dir.v3 is a structure: 
-;   (make-dir.v3 Symbol LOD LOF)
+;   (make-dir.v3 Symbol Dir* File*)
  
-; A LOD is one of: 
+; A Dir* is one of: 
 ; – '()
-; – (cons Dir.v3 LOD)
+; – (cons Dir.v3 Dir*)
  
-; A LOF is one of: 
+; A File* is one of: 
 ; – '()
-; – (cons File.v3 LOF)
+; – (cons File.v3 File*)
+
+; Dir.v3 -> Number
+; count the number of files in the directory structure
 
 ; -- Figure 73 as a Model 3 directory structure
 (define f73
@@ -61,6 +68,25 @@
                                      
 (check-expect (how-many f73) 7)
 
+(check-expect (how-many.v1 (make-dir.v3 'Test empty empty)) 0)
+(check-expect (how-many.v1 f73) 7)
+                                     
+(define (how-many.v1 root)
+  (local (; Dir* -> Number
+          ; the number of files in a list of directory structures
+          (define (count-dirs d*)
+            (cond [(empty? d*) 0]
+                  [else (+ (how-many   (first d*))
+                           (count-dirs (rest d*)))])))
+  (cond [(empty? (dir.v3-dirs root))
+         (+ 0 (length (dir.v3-files root)))]
+        [else
+         (+ (count-dirs (dir.v3-dirs root))
+            (length   (dir.v3-files root)))])))
+
+; simplified version of the above
+; NOTE: possible because the structure separates directories and files
+;       making it easier to handle each data type separately
 (define (how-many root)
   (+ (foldr + 0 (map how-many (dir.v3-dirs root)))
      (length (dir.v3-files root))))

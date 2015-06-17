@@ -1,10 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-291-UsingHowManyWithCreateDir) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 291.
+; Exercise 297.
 ; 
 ; Use create-dir to create data representations of some sample directories
-; on your computer. Then use how-many from exercise 289 to count how many 
+; on your computer. Then use how-many from exercise 295 to count how many 
 ; files they contain. Why are you confident that how-many produces correct 
 ; results for these directories?
 

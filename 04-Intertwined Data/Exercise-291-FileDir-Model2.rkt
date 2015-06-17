@@ -1,9 +1,9 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-285-FileDir-Model2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 285.
+; Exercise 291.
 ;
-; Translate the directory tree in figure 73 into a data representation 
+; Translate the directory tree in figure 74 into a data representation 
 ; according to model 2.
 
 ; -- Data Definitions
