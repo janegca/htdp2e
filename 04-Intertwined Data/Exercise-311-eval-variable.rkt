@@ -90,7 +90,7 @@
          (error "impossible to evaluate non-numeric expression")]
         [ else (eval-expr e)]))
 
-; -- Example Assoication Lists
+; -- Example Association Lists
 (define al-x  '((x 5)))
 (define al-xy '((x 5) (y 3)))
 
