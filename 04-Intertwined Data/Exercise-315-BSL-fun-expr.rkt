@@ -20,7 +20,7 @@
 ; – (make-mul BSL-fun-expr BSL-fun-expr)
 
 ; -- Structures
-(define-struct fun [name expr])
+(define-struct fun [name arg])
 ; Fun is a structure: (make-fun Symbol  BSL-fun-expr)
 
 (define-struct add [left right])
@@ -32,7 +32,7 @@
 ; Use your data definition to represent the following expressions:
 ;
 ;    (k (+ 1 1))
-        (make-fun 'k (make-add 1 1))
+        (make-fun 'k (make-add 1 1))  
 ;    (* 5 (k (+ 1 1)))
         (make-mul 5 (make-fun 'k (make-add 1 1)))
 ;    (* (i 5) (k (+ 1 1)))
