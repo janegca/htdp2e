@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-319-eval-function) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-323-eval-function) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ; Exercise 323. 
 ;
 ; Design eval-function*. The function consumes the BSL-fun-expr representation
@@ -99,7 +99,7 @@
         [(eq? f (def-name (first da))) (first da)]
         [else (lookup-def (rest da) f)]))
 
-; BSL-var-expr Symbol Number -> BSL-var-expr
+; BSL-fun-expr Symbol Number -> BSL-fun-expr
 ; replaces all symbol values in the expression with the number value
 (define (subst e x v)
   (cond [(number? e) e]
