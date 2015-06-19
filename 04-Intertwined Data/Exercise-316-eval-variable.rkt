@@ -1,7 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-311-eval-variable) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 311. 
+; Exercise 316. 
 ;
 ; Design eval-variable. The function consumes a BSL-var-expr and determines 
 ; its value if numeric? is true. Otherwise it signals an error, saying that 
@@ -23,11 +23,10 @@
 ; value; otherwise it signals the same error as eval-variable. 
 ; 
 ; Hint: Think of the given BSL-var-expr as an atomic value and traverse the 
-;       given association list instead. Or use a loop from figure 56. We 
+;       given association list instead. Or use a loop from figure 58. We 
 ;       provide this hint because the creation of this function requires a
 ;       little design knowledge from Simultaneous Processing.
 
-; -- From Exercise 310
 
 ; A BSL-expr is one of: 
 ; – Number

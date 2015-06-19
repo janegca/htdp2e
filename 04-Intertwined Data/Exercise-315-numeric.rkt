@@ -1,10 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-310-numeric) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 310.
+; Exercise 315.
 ; 
 ; Design the function numeric?, which determines whether a BSL-var-expr is 
-; also a BSL-expr. Here we assume that your solution to exercise 304 is the
+; also a BSL-expr. Here we assume that your solution to exercise 309 is the
 ; definition for BSL-var-expr without the line for Symbol.
 ;
 ; NOTE: i.e. check that no symbols are in the expression

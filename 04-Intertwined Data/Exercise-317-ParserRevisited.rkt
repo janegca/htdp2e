@@ -1,9 +1,9 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-312-ParserRevisited) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 312. 
+; Exercise 317. 
 ;
-; Modify the parser in figure 75 so that it creates BSL-var-expr if it is an 
+; Modify the parser in figure 77 so that it creates BSL-var-expr if it is an 
 ; appropriate BSL expression.
 
 ; -- atom? from Exercise 275

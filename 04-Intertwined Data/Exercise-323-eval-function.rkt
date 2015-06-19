@@ -1,14 +1,14 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-319-eval-function) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 319. 
+; Exercise 323. 
 ;
 ; Design eval-function*. The function consumes the BSL-fun-expr representation
 ; of some expression e and the BSL-fun-def* representation of a definitions 
 ; area da. It produces the result that DrRacket shows if you evaluate e in 
 ; the interactions area assuming the definitions area contains da.
 ;
-; The function works like eval-function1 from exercise 317. For an application
+; The function works like eval-function1 from exercise 321. For an application
 ; of some function f, it
 ;
 ; 1. evaluates the argument;

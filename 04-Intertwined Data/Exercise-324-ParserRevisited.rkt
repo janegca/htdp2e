@@ -1,10 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exerecise-320-ParserRevisited) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 320. 
+; Exercise 324. 
 ;
 ; Modify the parser in figure 75 so that it creates BSL-fun-expr if it is an 
-; appropriate BSL expression. Also see exercise 313 [Ex 312]
+; appropriate BSL expression. Also see exercise 317 
 
 ; -- atom? from Exercise 275
 ; Any -> Boolean

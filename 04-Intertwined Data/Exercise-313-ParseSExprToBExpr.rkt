@@ -1,9 +1,9 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-308-ParseSExprToBExpr) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 308.
+; Exercise 313.
 ;
-; Figure 75 presents a BSL parser for S-expressions. Specifically, the parse 
+; Figure 77 presents a BSL parser for S-expressions. Specifically, the parse 
 ; function consumes an S-expr and produces an BSL-expr—if and only if the 
 ; given S-expression is the result of quoting a BSL expression that has a
 ; BSL-expr representative.
@@ -16,7 +16,6 @@
 ; the list argument. Real parsers do not use length because it slows the 
 ; functions down.
 
-; -- atom? from Exercise 275
 ; Any -> Boolean
 (check-expect (atom? 10)      #true)
 (check-expect (atom? "hello") #true)

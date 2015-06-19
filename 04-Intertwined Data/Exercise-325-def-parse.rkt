@@ -1,9 +1,9 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-321-def-parse) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 321. 
+; Exercise 325. 
 ; 
-; Figure 76 presents a BSL definitions parser for S-expressions. Specifically,
+; Figure 78 presents a BSL definitions parser for S-expressions. Specifically,
 ; the def-parse function consumes an S-expr and produces a BSL-fun-def—if and 
 ; only if the given S-expression is the result of quoting a BSL definition 
 ; that has a BSL-fun-def representative.
@@ -11,7 +11,7 @@
 ; Create test cases for the def-parse function until DrRacket tells you that 
 ; all expressions in the definitions area are covered during the test run.
 ;
-; Note: The exercises assumes that you have a solution for exercise 320. That
+; Note: The exercises assumes that you have a solution for exercise 324. That
 ;       is, you have a function parse that turns an S-expr into a BSL-fun-expr
 ;       representation, if possible.
 ;
@@ -25,7 +25,7 @@
 (define-struct mul [left right])
 (define-struct fun [name arg])
 
-; -- Code from Figure 76
+; -- Code from Figure 78
 (define WRONG "wrong kind of S-expression")
  
 (define-struct def [name para body])

@@ -1,10 +1,10 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-317-eval-definition1) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
-; Exercise 317.
+; Exercise 321.
 ; 
 ; Design eval-definition1. The function is given an expression (representation)
-; in the extended data definition of exercise 315 and the one function
+; in the extended data definition of exercise 320 and the one function
 ; definition that is assumed to exist in the definitions area. It evaluates
 ; the given expression and returns its value.
 ;
@@ -34,7 +34,7 @@
 ; Recursion.
 ;
 ; If eval-definition1 encounters a variable, it signals the same error as 
-; eval-variable from exercise 311. Also, for function applications that do 
+; eval-variable from exercise 316. Also, for function applications that do 
 ; not refer to f, eval-definition1 signals an error as if it had encountered a variable.
 ;
 ; Warning The use of generative recursion introduces a new element into your
@@ -43,7 +43,7 @@
 ; wish to construct an input for eval-definition1 that causes it to run
 ; forever. Use STOP to terminate the program. 
 
-; -- from Exercise 316
+; -- from Exercise 320
 
 ; A BSL-fun-expr is one of: 
 ; – Number
