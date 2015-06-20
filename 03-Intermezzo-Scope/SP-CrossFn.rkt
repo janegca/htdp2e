@@ -35,12 +35,14 @@
          (list (list 'a 1) (list 'b 1) (list 'c 1)
                (list 'a 2) (list 'b 2) (list 'c 2)))
 
-; -- using for*/list (not currently available in h2dp teachpacks)
+; -- using for*/list (available in DrRacket v6.2)
 
-; [List-of X] [List-of Y] -> [List-of [List X Y]]
-; generate all possible pairs of items from l1 and l2
-;(check-satisfied (cross '(a b c) '(1 2)) (lambda (c) (= (length c) 6)))
-;
-;(define (cross l1 l2)
-;   (for*/list ([item1 l1][item2 l2])
-;      (list item1 item2)))
+(require 2htdp/abstraction)
+
+(check-satisfied (xcross '(a b c) '(1 2)) (lambda (c) (= (length c) 6)))
+(check-satisfied (xcross '(a b c) '(1 2 3))
+                 (lambda (c) (= (length c) 9)))
+                             
+(define (xcross l1 l2)
+  (for*/list ([item1 l1][item2 l2])
+      (list item1 item2)))

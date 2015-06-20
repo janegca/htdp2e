@@ -23,8 +23,9 @@
 
 ; [List-of Attribute] Symbol -> String
 ; the string value of the given symbol, if found, otherwise #false
-(check-expect (attrib-value '() 'b) #false)
+(check-expect (attrib-value '() 'b)      #false)
 (check-expect (attrib-value a0 'initial) "red")
+(check-expect (attrib-value a1 'b)       "beryl")
 
 (define (attrib-value a* s) 
   (local ((define res (assq s a*)))

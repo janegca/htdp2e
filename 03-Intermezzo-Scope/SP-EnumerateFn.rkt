@@ -14,17 +14,23 @@
               (lambda (i) 
                 (list (+ i 1) (list-ref lst i)))))
 
-; this is the solution using for/list (available in Racket but not yet
-; available in DrRacket v 6.1.1 HtDP2e teachpacks)
+; this is the solution using for/list (available in DrRacket v6.2 2015-06-20)
+(require 2htdp/abstraction)
 
 ; [List-of X] -> [List-of [List N X]]
-; pair each item in l with its index 
-;(check-expect (enumerate.loop '(a b c)) '((1 a) (2 b) (3 c)))
+; pair each item in the list with its index 
+(check-expect (enumerate.loop '(a b c)) '((1 a) (2 b) (3 c)))
 
-;(define (enumerate.loop l)
-;  (for/list ((item l) (ith (length l)))
-;    (list (+ ith 1) item)))
+(define (enumerate.loop lst)
+  (for/list ((item lst) (ith (length lst)))
+    (list (+ ith 1) item)))
 
 
+; [List-of X] [List-of Y] -> [List-of [List X Y]]
+; generate all possible pairs of items from l1 and l2
+(check-satisfied (enumerate.loop.v1 '(a b c))
+                 (lambda (c) (= (length c) 9)))
 
-                             
+(define (enumerate.loop.v1 lst)
+  (for*/list ((i (length lst)) (j lst))
+    (list i j)))
