@@ -12,9 +12,9 @@
 ; Hint: Your eval-all function should process variables in the given
 ;       expression like eval-var-lookup in exercise 319. 
 
-; TODO - needs a rethink, have to handle param and argument lists
-;        right now works for functions with a single parameter
-
+; NOTE: this only handle functions with one param
+;       doesn't handle add? or fun? (not part of examples)
+;       TODO - re-work it
 
 ; -- Code from earlier exercises
 (define-struct const [name value])
@@ -28,10 +28,8 @@
 (define d2 (make-def   'area-of-circle 'r
                        (make-mul 'close-to-pi
                                (make-mul 'r 'r))))
-(define d3 (make-def   'volume-of-cylinder '(r h)
-                       (make-mul 'h (make-fun 'area-of-circle 'r))))
 
-(define da-all (list d1 d2 d3))
+(define da-all (list d1 d2))
 
 ; -- Functions
 
@@ -78,9 +76,6 @@
                            (define b   (eval-constants da (def-body fd)))
                            (define x   (def-param fd)))
                      (eval-expr (subst b x (eval-expr arg))))]     
-                  [(add? e)
-                   (+ (eval-expr (add-left  e))
-                      (eval-expr (add-right e)))]
                   [(mul? e)
                    (* (eval-expr (mul-left  e))
                       (eval-expr (mul-right e)))])
@@ -98,18 +93,12 @@
   (cond [(mul? e) 
           (make-mul (get-value (mul-left e))
                     (get-value (mul-right e)))]
-        [(add? e)
-         (make-add (get-value (add-left e))
-                   (get-value (add-right e)))]
         [else e])))
 
 ; BSL-fun-expr Symbol Number -> BSL-fun-expr
 ; replaces all symbol values in the expression with the number value
 (define (subst e x v)
   (cond [(number? e) e]
-        [(symbol? e) (if (eq? e x) v e)]
-        [(fun?    e) (make-fun (fun-name e) (subst (fun-arg e) x v))]
-        [(add?    e) (make-add (subst (add-left e)  x v)
-                               (subst (add-right e) x v))]
+        [(symbol? e) (if (eq? e x) v e)]       
         [(mul?    e) (make-mul (subst (mul-left e)  x v)
                                (subst (mul-right e) x v))]))
