@@ -39,13 +39,15 @@
 (define-struct fun [name arg])
 (define-struct mul [left right])
   
-; -- Examples
-(define c1 (make-const 'close-to-pi 3.14))
-(define f1 (make-def 'area-of-circle 'r
+; -- Example definitions
+(define d1 (make-const 'close-to-pi 3.14))
+(define d2 (make-def 'area-of-circle 'r
                      (make-mul (make-const 'close-to-pi 3.14)
                                (make-mul 'r 'r))))
+(define d3 (make-def 'volume-of-10-cylinder 'r
+                     (make-mul 10 (make-fun 'area-of-circle 'r))))
 
-(define da-all (list c1 f1))
+(define da-all (list d1 d2 d3))
 
 ; -- Functions
 
@@ -65,10 +67,8 @@
 ; BSL-da-all Symbol -> Def
 ; the function definition whose name matches f, if found,
 ; otherwise, an errror
-(check-expect (lookup-fun-def da-all 'area-of-circle)
-              (make-def 'area-of-circle 'r
-                     (make-mul (make-const 'close-to-pi 3.14)
-                               (make-mul 'r 'r))))
+(check-expect (lookup-fun-def da-all 'area-of-circle) d2)
+(check-expect (lookup-fun-def da-all 'volume-of-10-cylinder) d3)
 (check-error  (lookup-fun-def da-all 'no-fun-found))
               
 (define (lookup-fun-def da f)

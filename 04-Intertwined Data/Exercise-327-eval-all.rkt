@@ -12,9 +12,7 @@
 ; Hint: Your eval-all function should process variables in the given
 ;       expression like eval-var-lookup in exercise 319. 
 
-; NOTE: this only handle functions with one param
-;       doesn't handle add? or fun? (not part of examples)
-;       TODO - re-work it
+; TODO - re-work constant handling
 
 ; -- Code from earlier exercises
 (define-struct const [name value])

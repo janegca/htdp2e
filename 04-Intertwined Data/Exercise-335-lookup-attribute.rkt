@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-335-attribute-value) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Exercise-335-lookup-attribute) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
 ; Exercise 335. 
 ; 
 ; Design attribute-value. The function consumes a list of attributes and a 
@@ -23,11 +23,11 @@
 
 ; [List-of Attribute] Symbol -> String
 ; the string value of the given symbol, if found, otherwise #false
-(check-expect (attrib-value '() 'b)      #false)
-(check-expect (attrib-value a0 'initial) "red")
-(check-expect (attrib-value a1 'b)       "beryl")
+(check-expect (lookup-attribute '() 'b)      #false)
+(check-expect (lookup-attribute a0 'initial) "red")
+(check-expect (lookup-attribute a1 'b)       "beryl")
 
-(define (attrib-value a* s) 
+(define (lookup-attribute a* s) 
   (local ((define res (assq s a*)))
     (if (cons? res)
         (second res)
