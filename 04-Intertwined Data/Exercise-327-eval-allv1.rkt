@@ -28,11 +28,19 @@
                      (make-mul 10 (make-fun 'area-of-circle 'r))))
 (define d4 (make-def 'add2 'n
                      (make-add 2 'n)))
+(define d5 (make-def 'f 'x (make-add 3 'x)))
+(define d6 (make-def 'g 'y (make-fun 'f (make-mul 2 'y))))
+;(define d7 (make-def 'h 'v (make-add (make-fun 'f 'v) (make-fun 'g 'v))))
+(define d7 (make-def 'h 'v (make-add (make-add 3 'v)
+                                     (make-add 3 (make-mul 2 'v)))))
 
 (define da-all (list `(close-to-pi ,d1)
                      `(area-of-circle ,d2)
                      `(volume-of-10-cylinder ,d3)
-                     `(add2 ,d4)))
+                     `(add2 ,d4)
+                     `(f ,d5)
+                     `(g ,d6)
+                     `(h ,d7)))
 
 ; -- Functions
 ; BSL-da-all Symbol -> Symbol
@@ -52,6 +60,9 @@
 (check-within (eval-all (make-fun 'volume-of-10-cylinder 1) da-all)
               31.40 0.01)
 (check-expect (eval-all (make-fun 'add2 10) da-all) 12)
+(check-expect (eval-all (make-fun 'f 3) da-all) 6)
+(check-expect (eval-all (make-fun 'g 3) da-all) 9)
+(check-expect (eval-all (make-fun 'h 3) da-all) 15)
 
 (define (eval-all e da)
   (cond [(number? e) e]
@@ -66,7 +77,7 @@
                (eval-all b da)                        ; assume it's in da
                (eval-all b (cons (list x arg) da))))] ; otherwise, add value
         [(add? e)
-         (+ (eval-all (add-left e)  da)
+         (+ (eval-all (add-left  e) da)
             (eval-all (add-right e) da))]
         [(mul? e)
          (* (eval-all (mul-left  e) da)
