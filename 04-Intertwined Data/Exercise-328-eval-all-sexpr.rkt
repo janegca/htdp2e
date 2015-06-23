@@ -18,7 +18,9 @@
 ; You should know that eval-all-sexpr makes it straightforward to check
 ; whether it really mimics DrRacket’s evaluator.
 
-; TOD0 - errors with d5
+; NOTE: fails a check of (h 3) - need to figure out how to pass argument
+;                                to inner functions that use different
+;                                variable names
 
 ; -- Structures from earlier exercises
 (define-struct const [name value])
@@ -28,18 +30,27 @@
 (define-struct mul   [left right])
 
 ; -- Example functions as S-expr's
-(define f1 '(f 3))
-(define f2 '(g 3))
-(define f3 '(h 3))
+(define f1 '(area-of-circle 1))
+(define f2 '(volume-of-10-cylinder 1))
+(define f3 '(add2 2))
+
+(define f4 '(f 3))
+(define f5 '(g 3))
+(define f6 '(h 3))
  
 ; -- Example function definitions as S-expr's
-(define d1 '(define (f x) (+ 3 x)))
-(define d2 '(define (g y) (f (* 2 y))))
-(define d3 '(define (h v) (+ (f v) (g v))))
-(define d4 '(close-to-pi 3.14))
-(define d5 '(define area-of-circle r (* close-to-pi (* r r))))
 
-(define se-da-all (list d1 d2 d3 d4))
+(define d1 '(close-to-pi 3.14))
+(define d2 '(define (area-of-circle r) (* close-to-pi (* r r))))
+(define d3 '(define (volume-of-10-cylinder r)
+              (* 10 (area-of-circle r))))
+(define d4 '(define (add2 n) (+ 2 n)))
+
+(define d5 '(define (f x) (+ 3 x)))
+(define d6 '(define (g y) (f (* 2 y))))
+(define d7 '(define (h v) (+ (f v) (g v))))
+                                              
+(define se-da-all (list d1 d2 d3 d4 d5 d6 d7))
 
 ; -- Error messages
 (define WRONG "wrong kind of S-expression")
@@ -49,13 +60,6 @@
 ; SL -> BSL-fun-def*
 ; translates a list of valid S-expressions to a list of valid
 ; BSL-fun-def's, if possible
-(check-expect 
- (da-parse se-da-all)
- (list  (make-def 'f 'x (make-add 3 'x))
-        (make-def 'g 'y (make-fun 'f (make-mul 2 'y)))
-        (make-def 'h 'v (make-add (make-fun 'f 'v) (make-fun 'g 'v)))
-        (make-const 'close-to-pi 3.14)))
-
 (define (da-parse sl)
   (cond [(empty? sl) '()]
         [else (append (list
@@ -68,11 +72,15 @@
 
 ; S-expr -> BSL-fun-def
 ; creates representation of a BSL definition for s (if possible)
-(check-expect (def-parse d1) (make-def 'f 'x (make-add 3 'x)))
-(check-expect (def-parse d2)
-              (make-def 'g 'y (make-fun 'f (make-mul 2 'y))))
-(check-expect (def-parse d3)
-              (make-def 'h 'v (make-add (make-fun 'f 'v) (make-fun 'g 'v))))
+(check-error  (def-parse 's) WRONG)
+(check-error  (def-parse "a") WRONG)
+(check-error  (def-parse '(define f x (+ 3 x))))
+(check-error  (def-parse '(define (f x y) (+ 3 x))))
+(check-error  (def-parse '(define "x" (+ 3 x))))
+(check-error  (def-parse '(define ("x" 3) (+ 3 x))))
+(check-error  (def-parse '(define (f x) "a")))
+(check-error  (def-parse '(define (f x) ('() 3 x))))
+(check-error  (def-parse '(define (f x) (/ 3 x))))
 
 (define (def-parse s)
   (local (; S-expr -> BSL-fun-def
@@ -129,11 +137,6 @@
   
 ; -- atom? from Exercise 275
 ; Any -> Boolean
-(check-expect (atom? 10)      #true)
-(check-expect (atom? "hello") #true)
-(check-expect (atom? 'a)      #true)
-(check-expect (atom? '())     #false)
-
 (define (atom? v)
   (or (number? v)
       (string? v)
@@ -165,6 +168,7 @@
 
 ; BSL-da-all Symbol -> Symbol
 ; the symbol value, if found, otherwise #false
+(check-expect (lookup-symbol '((a 2)) 'z) #false)
 
 (define (lookup-symbol a* s)
   (cond [(empty? a*) #false]
@@ -178,10 +182,13 @@
 ; S-expr SL -> Number
 ; if possible, the value of the expressions based on the given
 ; definitions
-(check-expect (eval-all-sexpr f1 se-da-all)  6)
-(check-expect (eval-all-sexpr f2 se-da-all)  9)
-;(check-expect (eval-all-sexpr f3 se-da-all) 15)
 (check-expect (eval-all-sexpr 'close-to-pi se-da-all) 3.14)
+(check-expect (eval-all-sexpr f1 se-da-all) 3.14)
+(check-expect (eval-all-sexpr f2 se-da-all) 31.40)
+(check-expect (eval-all-sexpr f3 se-da-all) 4)
+(check-expect (eval-all-sexpr f4 se-da-all) 6)
+(check-expect (eval-all-sexpr f5 se-da-all) 9)
+;(check-expect (eval-all-sexpr f6 se-da-all) 15)  ; fails
 
 (define (eval-all-sexpr se sl)
   (local ((define bsl-da (da-parse sl))
