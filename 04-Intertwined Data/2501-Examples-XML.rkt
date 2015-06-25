@@ -72,7 +72,7 @@
 (check-expect (xexpr-attributes e3) '())
 (check-expect (xexpr-attributes e4) '((initial "red")))
 
-(define (xexpr-attributes xe)
+(define (xexpr-attributes.v1 xe)
   (local ((define optional-loa+content (rest xe)))
     (cond
       [(empty? optional-loa+content) '()] ; no attribs or content
@@ -90,4 +90,13 @@
             ; if the first element is a list, we have attributes
             (cons? possible-attribute))]))
 
+; -- re-write of attributes using match
+(require 2htdp/abstraction)
 
+(define (xexpr-attributes xe)
+  (match xe
+    [(cons sym '()) '()]              ; no optional values
+    [(cons sym (cons '() rest)) '()]  ; no attributes, contents option  
+    [(cons n (cons a '()))            ; one optional value
+     (if (list? (first a)) a '())]    ; attribs or content?
+    [(cons n (cons a rest)) a]))      ; both options
