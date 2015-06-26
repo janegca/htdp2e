@@ -25,7 +25,7 @@
 (check-expect (lookup-attribute a0 'initial) "red")
 (check-expect (lookup-attribute a1 'b)       "beryl")
 
-(define (lookup-attribute.v1 a* s) 
+(define (lookup-attribute a* s) 
   (local ((define res (assq s a*))) ; assq matches 1st item in a pair
     (if (cons? res)
         (second res)

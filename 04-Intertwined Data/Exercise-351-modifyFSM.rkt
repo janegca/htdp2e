@@ -11,8 +11,10 @@
 (require 2htdp/universe)
 
 ; A FSM is a [List-of 1Transition]
+
 ; A 1Transition is a list of two items:
 ;   (cons FSM-State (cons FSM-State '()))
+
 ; A FSM-State is a String that specifies color
  
 ; data examples 
