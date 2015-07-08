@@ -48,7 +48,7 @@
          [(or (<= f@mid 0 (f right)) (<= (f right) 0 f@mid))  ;  c
           (find-root f mid right)]))]))
 
-; -- evaluating (find-root 3 6) with TOLERACE = 0.5
+; -- evaluating (find-root f 3 6) with TOLERACE = 0.5 (f = poly function)
 ;
 ;  step    left  right  mid  (f left)  (f right)  (f mid)        satisfies
 ;  n=1      3      6     4.5   -1          8         1.25            b
