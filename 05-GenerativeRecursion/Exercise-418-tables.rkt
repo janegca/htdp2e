@@ -26,8 +26,6 @@
 ; of the given table. This kind of root-finding process is often called a
 ; linear search.
 ;
-;
-
 
 (define-struct table [length array])
 ; A Table is a 
@@ -42,31 +40,51 @@
  
 (define table2 (make-table 1 a2))
 
+; N -> Number
+(define (a n) (- 1024 (+ n 1)))
+(define table3 (make-table 1024 a))
+
+; N -> Number
+(define (a3 i)
+  (cond [(= i 0) -1]
+        [(= i 1) -0.25]
+        [(= i 2)  0.5]
+        [(= i 3)  1]
+        [else (error "table not defined for i > 3")]))
+
+(define table4 (make-table 4 a3))
+
+
 ; Table N -> Number
 ; looks up the ith value in array of t
 (define (table-ref t i)
   ((table-array t) i))
 
 ; Table -> Number
-; find the smallest index for the root a table
+; find the smallest index for the root of a monotonically increasing table
+(check-expect (find-linear table1) 0)
+(check-expect (find-linear table2) 0)
+(check-expect (find-linear table3) 1023)  ; but not monotonic
+(check-expect (find-linear table4) 0.5)   ; assumes 0.5 closer to zero than -0.5
+
 (define (find-linear t)
   (local ((define VL (- (table-length t) 1))
 
           (define (find-root i)
-            (local ((define val (table-ref t i))
-                    (define other-values (find-root (+ i 1))))  
-            (cond
-              [(= i VL)  i]  ; end of table
-              [(= 0 val) i]  ; first zero value
-              [else (if (<= val other-values) i other-values)]))))
+            (local ((define val     (table-ref t i))
+                    (define nextVal (if (< i VL)
+                                        (table-ref t (+ i 1))
+                                        val)))
+            (cond [(= i VL) i]               ; end of table
+                  [(= 0 val) i]
+                  [else
+                   (if (< 0 val nextVal)
+                       val
+                       (find-root (+ i 1)))]))))
+            
     (find-root 0)))
 
-; re-write - have to start at the end of the table otherwise (+ i 1) is
-; non-terminating
+; Note: incomplete solution           
 
-
-
-    
-          
          
 
