@@ -6,6 +6,8 @@
 ; Develop the algorithm integrate-dc, which integrates a function f between
 ; the boundaries a and b using a divide-and-conquer strategy. Use Kepler’s
 ; method when the interval is sufficiently small.
+;
+; NOTE: This is not the correct answer ... need to revisit
 
 ; -- function examples
 (define EPSILON 0.1)
@@ -21,14 +23,28 @@
 (check-within (integrate-dc square 0 10)
               (- (expt 10 3) (expt 0 3)) EPSILON)
 
-(define (integrate-dc f a b)
-  (local ((define W (- b a))      ; rectangle width
-          (define S (/ W 2))      ; rectangle midpoint
-          (define kepler (/ (* (- b a) (+ (f a) (f b))) 2)))
-    (cond [(<= W 10) kepler]
-          [else (+ (* W (f (+ a S)))
+(define (integrate-dc.v1 f a b)
+  (local ((define W (- b a))         ; rectangle width
+          (define S (+ a (/ W 2)))   ; rectangle midpoint
+          (define area (* W (f S)))  ; area using height at midpoint
+          (define kepler (/ (* W (+ (f a) (f b))) 2)))
+    (cond [(<= W 1) kepler]
+          [else (+ area
                    (integrate-dc f a S)
                    (integrate-dc f S b))])))
 
+(define (integrate-dc f a b)
+  (local ((define (area c d)
+            (local ((define w (- d c))
+                    (define h (f (+ c (/ w 2)))))
+              (* w h)))
+          (define W (- b a))
+          (define M (+ a (/ W 2)))
+          (define kepler (/ (* W (+ (f a) (f b))) 2)))
+    (cond [(<= W 10) kepler]
+          [else (+ (area a M) (integrate-dc f a M)
+                   (area M b) (integrate-dc f M b))])))
 
-; WRONG!
+
+          
+            
